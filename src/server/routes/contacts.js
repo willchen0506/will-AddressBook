@@ -16,7 +16,7 @@ router.get(BASE_URL, async (ctx) => {
       };
       return;
     } 
-    const contacts = await queries.getAllContacts();
+    const contacts = await queries.getAllContacts(ctx.state.user.username.toLowerCase());
     ctx.body = {
       status: 'success',
       data: contacts
@@ -36,7 +36,7 @@ router.get(`${BASE_URL}/:name`, async (ctx) => {
       };
       return;
     } 
-    const contact = await queries.getSingleContact(ctx.params.name.toLowerCase());
+    const contact = await queries.getSingleContact(ctx.state.user.username.toLowerCase(), ctx.params.name.toLowerCase());
     ctx.body = {
       status: 'success',
       data: contact
@@ -55,7 +55,7 @@ router.post(`${BASE_URL}`, async (ctx) => {
       };
       return;
     } 
-    const contact = await queries.addContact(ctx.request.body);
+    const contact = await queries.addContact(ctx.state.user.username.toLowerCase(), ctx.request.body);
     if (contact.length) {
       ctx.status = 201;
       ctx.body = {
@@ -89,7 +89,7 @@ router.put(`${BASE_URL}/:name`, async (ctx) => {
       };
       return;
     } 
-    const contact = await queries.updateContact(ctx.params.name, ctx.request.body);
+    const contact = await queries.updateContact(ctx.state.user.username.toLowerCase(), ctx.params.name.toLowerCase(), ctx.request.body);
     if (contact.length) {
       ctx.status = 200;
       ctx.body = {
@@ -122,7 +122,7 @@ router.delete(`${BASE_URL}/:name`, async (ctx) => {
       };
       return;
     } 
-    const contact = await queries.deleteContact(ctx.params.name);
+    const contact = await queries.deleteContact(ctx.state.user.username.toLowerCase(), ctx.params.name.toLowerCase());
     if (contact.length) {
       ctx.status = 200;
       ctx.body = {

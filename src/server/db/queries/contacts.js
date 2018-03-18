@@ -1,34 +1,38 @@
 const knex = require('../connection');
 
-function getAllContacts() {
-  return knex('contacts')
-  .select('name', 'phone');
-}
-
-function getSingleContact(name) {
+function getAllContacts(user) {
   return knex('contacts')
   .select('name', 'phone')
-  .whereRaw('LOWER("name") = ?', name)
+  .whereRaw('LOWER("user") = ?', user);
 }
 
-function addContact(contact) {
+function getSingleContact(user, name) {
+  return knex('contacts')
+  .select('phone')
+  .whereRaw('LOWER("user") = ? AND LOWER("name") = ? ', [user, name]);
+}
+
+function addContact(user, contact) {
+  contact.user = user;
   return knex('contacts')
   .insert(contact)
-  .returning('*');
+  .returning(['name', 'phone']);
 }
 
-function updateContact(name) {
+function updateContact(user, name, contact) {
+  contact.user = user;
   return knex('contacts')
   .update(contact)
   .whereRaw('LOWER("name") = ?', name)
-  .returning('name', 'phone');
+  .returning(['name', 'phone']);
 }
 
-function deleteContact(id) {
+function deleteContact(user, name) {
+
   return knex('contacts')
   .del()
-  .where({ id: parseInt(id) })
-  .returning('*');
+  .whereRaw('LOWER("user") = ? AND LOWER("name") = ? ', [user, name])
+  .returning(['name', 'phone']);
 }
 
 module.exports = {
