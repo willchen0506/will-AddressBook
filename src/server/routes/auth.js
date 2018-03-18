@@ -26,7 +26,7 @@ router.post('/auth/register', async (ctx) => {
       ctx.redirect('/auth/status');
     } else {
       ctx.status = 400;
-      ctx.body = { status: 'error' };
+      ctx.body = { status: 'Unable to register. Please make sure email has not been used.' };
     }
   })(ctx);
 });
@@ -64,7 +64,7 @@ router.post('/auth/login', async (ctx) => {
       ctx.redirect('/auth/status');
     } else {
       ctx.status = 400;
-      ctx.body = { status: 'error' };
+      ctx.body = { status: 'Login failed. please check username and password' };
     }
   })(ctx);
 });
