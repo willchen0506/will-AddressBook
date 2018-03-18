@@ -11,6 +11,7 @@ router.get('/auth/register', async (ctx) => {
 });
 
 router.post('/auth/register', async (ctx) => {
+  console.log(ctx.request.body.username);
   const user = await queries.addUser(ctx.request.body);
   return passport.authenticate('local', (err, user, info, status) => {
     if (user) {
