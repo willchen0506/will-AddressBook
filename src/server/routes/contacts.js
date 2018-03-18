@@ -8,6 +8,14 @@ module.exports = router;
 
 router.get(BASE_URL, async (ctx) => {
   try {
+    if (!ctx.isAuthenticated()){
+        ctx.status = 401;
+        ctx.body = {
+        status: 'Unauthorized',
+        message: 'Please log in first'
+      };
+      return;
+    } 
     const contacts = await queries.getAllContacts();
     ctx.body = {
       status: 'success',
@@ -20,6 +28,14 @@ router.get(BASE_URL, async (ctx) => {
 
 router.get(`${BASE_URL}/:name`, async (ctx) => {
   try {
+        if (!ctx.isAuthenticated()){
+        ctx.status = 401;
+        ctx.body = {
+        status: 'Unauthorized',
+        message: 'Please log in first'
+      };
+      return;
+    } 
     const contact = await queries.getSingleContact(ctx.params.name.toLowerCase());
     ctx.body = {
       status: 'success',
@@ -31,6 +47,14 @@ router.get(`${BASE_URL}/:name`, async (ctx) => {
 })
 router.post(`${BASE_URL}`, async (ctx) => {
   try {
+    if (!ctx.isAuthenticated()){
+        ctx.status = 401;
+        ctx.body = {
+        status: 'Unauthorized',
+        message: 'Please log in first'
+      };
+      return;
+    } 
     const contact = await queries.addContact(ctx.request.body);
     if (contact.length) {
       ctx.status = 201;
@@ -57,6 +81,14 @@ router.post(`${BASE_URL}`, async (ctx) => {
 
 router.put(`${BASE_URL}/:name`, async (ctx) => {
   try {
+    if (!ctx.isAuthenticated()){
+        ctx.status = 401;
+        ctx.body = {
+        status: 'Unauthorized',
+        message: 'Please log in first'
+      };
+      return;
+    } 
     const contact = await queries.updateContact(ctx.params.name, ctx.request.body);
     if (contact.length) {
       ctx.status = 200;
@@ -82,6 +114,14 @@ router.put(`${BASE_URL}/:name`, async (ctx) => {
 
 router.delete(`${BASE_URL}/:name`, async (ctx) => {
   try {
+    if (!ctx.isAuthenticated()){
+        ctx.status = 401;
+        ctx.body = {
+        status: 'Unauthorized',
+        message: 'Please log in first'
+      };
+      return;
+    } 
     const contact = await queries.deleteContact(ctx.params.name);
     if (contact.length) {
       ctx.status = 200;
