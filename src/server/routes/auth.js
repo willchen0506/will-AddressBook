@@ -11,7 +11,14 @@ router.get('/auth/register', async (ctx) => {
 });
 
 router.post('/auth/register', async (ctx) => {
-  console.log(ctx.request.body.username);
+  if (ctx.request.body.username.indexOf("@") <= -1){
+        ctx.status = 400;
+        ctx.body = {
+        status: 'error',
+        message: 'Invalid username. Please use valid email.'
+      };
+      return;
+  } 
   const user = await queries.addUser(ctx.request.body);
   return passport.authenticate('local', (err, user, info, status) => {
     if (user) {
@@ -43,6 +50,14 @@ router.get('/auth/login', async (ctx) => {
 });
 
 router.post('/auth/login', async (ctx) => {
+  if (ctx.request.body.username.indexOf("@") <= -1){
+        ctx.status = 400;
+        ctx.body = {
+        status: 'error',
+        message: 'Invalid username. Please use valid email.'
+      };
+      return;
+  } 
   return passport.authenticate('local', (err, user, info, status) => {
     if (user) {
       ctx.login(user);
