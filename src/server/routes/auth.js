@@ -50,6 +50,7 @@ router.get('/auth/login', async (ctx) => {
 });
 
 router.post('/auth/login', async (ctx) => {
+  console.log(ctx.request.body);
   if (ctx.request.body.username.indexOf("@") <= -1){
         ctx.status = 400;
         ctx.body = {
